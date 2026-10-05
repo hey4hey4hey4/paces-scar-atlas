@@ -33,7 +33,7 @@ button{font:inherit}.btn{border:1px solid var(--line);background:#fff;color:var(
 <div class="app">
 <header class="top"><div class="brand"><strong>PACES Clinical Examination</strong><div class="sep"></div><span>Interactive surgical scars</span></div><div class="actions"><button id="explore" class="btn active">Explore</button><button id="exam" class="btn">PACES mode</button><button id="reset" class="btn">Reset</button></div></header>
 <div class="main">
-<aside class="side"><div class="side-title">Scar groups</div><button class="sys active" data-s="cardio">Cardiovascular</button><button class="sys" data-s="resp">Respiratory</button><button class="sys" data-s="abdo">Abdominal</button><button class="sys" data-s="renal">Renal</button><button class="sys" data-s="other">Neck / other</button><div class="note">Drag through 360°. Click the coloured scar itself. Colours identify the clinical system; there are no numbered markers over the anatomy.</div></aside>
+<aside class="side"><div class="side-title">Scar groups</div><button class="sys active" data-s="cardio">Cardiovascular</button><button class="sys" data-s="resp">Respiratory</button><button class="sys" data-s="abdo">Abdominal</button><button class="sys" data-s="renal">Renal</button><button class="sys" data-s="other">Neck / other</button><div class="note">Drag through 360°. Scars are anchored to explicit anatomical surfaces: anterior, lateral, posterolateral, flank or medial limb.</div></aside>
 <main class="viewer">
 <div id="stage"></div><div id="loading" class="loading">Loading the 3D patient…</div>
 <div class="legend"><span class="sw"></span> Colour-coded healed scars • click the scar itself</div><div id="badge" class="badge">Explore • Cardiovascular</div><div class="hint">Drag freely through 360° • wheel/pinch to zoom</div><div id="tip" class="tip"></div>
@@ -48,25 +48,25 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
 const MODEL="https://cdn.jsdelivr.net/gh/UMRAM-Bilkent/supine-human-model@main/assets/human_posed.glb";
 const data=[
-{id:"sternotomy",system:"cardio",name:"Median sternotomy",appearance:"Vertical midline scar over the sternum.",suggests:"Previous CABG, valve surgery or other open cardiac surgery.",look:"Leg/forearm harvest scars, valve click, pacemaker/ICD, heart-failure signs.",examiner:"Which operations use a median sternotomy? Which CABG conduits can be used?",pearl:"Sternotomy plus medial leg harvest scar strongly suggests CABG.",paths:[["front",[[0,.83],[0,.78],[0,.73],[0,.68]]]]},
-{id:"pacemaker",system:"cardio",name:"Pacemaker / ICD scar",appearance:"Short infraclavicular healed scar, sometimes with a palpable device.",suggests:"Permanent pacemaker or ICD insertion.",look:"Device contour, sternotomy, arrhythmia/cardiomyopathy and heart-failure signs.",examiner:"Common indications for permanent pacing or ICD?",pearl:"Inspect both infraclavicular fossae.",paths:[["front",[[.30,.805],[.40,.800],[.50,.792]]]]},
-{id:"carotid",system:"cardio",name:"Carotid endarterectomy scar",appearance:"Oblique scar along the anterior border of sternocleidomastoid.",suggests:"Previous carotid endarterectomy.",look:"Residual focal neurology and vascular disease elsewhere.",examiner:"When is carotid endarterectomy considered?",pearl:"Think systemic atherosclerosis.",paths:[["front",[[-.22,.875],[-.30,.902],[-.38,.930]]]]},
-{id:"radial",system:"cardio",name:"Radial artery harvest scar",appearance:"Longitudinal forearm scar.",suggests:"Radial artery harvest for CABG.",look:"Median sternotomy and saphenous-vein harvest scar.",examiner:"Which arterial CABG conduits are used?",pearl:"Inspect the forearms as well as chest and legs.",paths:[["front",[[-.72,.61],[-.73,.55],[-.74,.49]]]]},
-{id:"saphenous",system:"cardio",name:"Saphenous vein harvest scar",appearance:"Linear scar along the medial leg.",suggests:"Great saphenous vein harvest, usually for CABG.",look:"Median sternotomy and possible radial-artery harvest scar.",examiner:"Which venous conduit is commonly used for CABG?",pearl:"Classic combination with sternotomy.",paths:[["front",[[.21,.42],[.20,.34],[.19,.26],[.18,.17]]]]},
-{id:"thoracotomy",system:"resp",name:"Posterolateral thoracotomy scar",appearance:"Long curved posterolateral chest scar following an intercostal space.",suggests:"Previous major thoracic surgery such as lung resection.",look:"Drain scars, reduced expansion, clubbing and altered breath sounds.",examiner:"Which procedures may use a posterolateral thoracotomy?",pearl:"Best seen from the side/back.",paths:[["left",[[.30,.75],[.10,.72],[-.10,.68],[-.28,.63]]]]},
-{id:"chestdrain",system:"resp",name:"Chest-drain scar",appearance:"Small lateral intercostal scar.",suggests:"Previous intercostal drain.",look:"Thoracotomy and signs of pleural/lung disease.",examiner:"Describe the safe triangle.",pearl:"Easy to miss unless you inspect the lateral chest.",paths:[["left",[[.20,.62],[.08,.62],[-.02,.61]]]]},
-{id:"kocher",system:"abdo",name:"Kocher scar — right subcostal",appearance:"Curved right-subcostal incision parallel to the costal margin.",suggests:"Open cholecystectomy or other hepatobiliary surgery.",look:"Jaundice, hepatomegaly and other abdominal scars.",examiner:"Which operations use a right-subcostal incision?",pearl:"Patient right appears on your left when facing them.",paths:[["front",[[-.48,.625],[-.34,.645],[-.18,.655],[-.03,.652]]]]},
-{id:"mercedes",system:"abdo",name:"Mercedes-Benz scar",appearance:"Bilateral subcostal chevron scar meeting centrally with a short superior midline extension.",suggests:"Liver transplantation or major hepatobiliary surgery.",look:"Jaundice, ascites, transplant clues and immunosuppression effects.",examiner:"Complications after liver transplantation?",pearl:"The short central limb points superiorly toward the xiphoid.",paths:[["front",[[-.50,.615],[-.30,.642],[-.12,.655],[0,.660]]],["front",[[0,.660],[.12,.655],[.30,.642],[.50,.615]]],["front",[[0,.660],[0,.690]]]]},
-{id:"midline",system:"abdo",name:"Midline laparotomy scar",appearance:"Vertical abdominal midline scar.",suggests:"Previous major intra-abdominal surgery; exact operation is nonspecific.",look:"Incisional hernia, stoma, masses and other scars.",examiner:"What complications may follow laparotomy?",pearl:"Do not overcall the exact operation from a generic midline scar.",paths:[["front",[[0,.645],[0,.595],[0,.545],[0,.500],[0,.465]]]]},
-{id:"appendix",system:"abdo",name:"Lanz / gridiron appendicectomy scar",appearance:"Short right-iliac-fossa scar; Lanz is more transverse, gridiron more oblique.",suggests:"Previous open appendicectomy.",look:"Other abdominal scars or port sites.",examiner:"How do Lanz and gridiron incisions differ?",pearl:"Use both location and orientation.",paths:[["front",[[-.42,.515],[-.32,.505],[-.22,.500]]]]},
-{id:"pfannenstiel",system:"abdo",name:"Pfannenstiel scar",appearance:"Low gently curved transverse suprapubic scar.",suggests:"Caesarean section or other pelvic/gynaecological surgery.",look:"Other pelvic scars.",examiner:"Which operations use a Pfannenstiel incision?",pearl:"It sits very low; adequate exposure matters.",paths:[["front",[[-.34,.485],[-.18,.475],[0,.471],[.18,.475],[.34,.485]]]]},
-{id:"ports",system:"abdo",name:"Laparoscopic port scars",appearance:"Several small punctate or short scars, often including the umbilical region.",suggests:"Previous laparoscopic surgery.",look:"Port distribution, which can suggest the operation.",examiner:"Port-site complications?",pearl:"Small port scars may be diagnostically specific.",dots:[["front",[0,.555]],["front",[-.30,.600]],["front",[.30,.585]],["front",[.24,.505]]]},
-{id:"inguinal",system:"abdo",name:"Inguinal hernia repair scar",appearance:"Oblique scar just above the inguinal ligament.",suggests:"Previous open inguinal hernia repair.",look:"Recurrence and contralateral hernia.",examiner:"Complications of open inguinal hernia repair?",pearl:"Inspect both groins where appropriate.",paths:[["front",[[-.16,.475],[-.28,.468],[-.40,.455]]]]},
-{id:"renalTx",system:"renal",name:"Renal transplant scar",appearance:"Curved Rutherford–Morrison / hockey-stick scar in an iliac fossa.",suggests:"Previous renal transplantation.",look:"Transplant kidney, AV fistula, steroid effects and immunosuppression complications.",examiner:"Why is a graft placed in an iliac fossa?",pearl:"Transplant scar plus AV fistula is a classic renal combination.",paths:[["front",[[-.48,.535],[-.44,.510],[-.36,.485],[-.25,.468],[-.12,.462]]]]},
-{id:"fistula",system:"renal",name:"AV fistula / dialysis access",appearance:"Dialysis-access scar on the forearm.",suggests:"Current or previous haemodialysis.",look:"Thrill, bruit, aneurysmal segments and other CKD clues.",examiner:"How would you examine an AV fistula?",pearl:"Look, feel for a thrill, then auscultate for a bruit.",paths:[["front",[[.72,.61],[.73,.55],[.74,.49]]]]},
-{id:"nephrectomy",system:"renal",name:"Nephrectomy / loin scar",appearance:"Long oblique or curved flank/loin incision.",suggests:"Previous nephrectomy or retroperitoneal renal surgery.",look:"Renal impairment, hypertension and other renal scars.",examiner:"Common indications for nephrectomy?",pearl:"Best appreciated from the side/back.",paths:[["right",[[.30,.620],[.10,.605],[-.10,.585],[-.28,.555]]]]},
-{id:"thyroid",system:"other",name:"Thyroidectomy scar",appearance:"Low transverse gently curved collar scar.",suggests:"Previous thyroid surgery.",look:"Voice change, recurrent goitre and hypocalcaemia.",examiner:"Important complications after thyroidectomy?",pearl:"Think recurrent laryngeal nerve injury and hypocalcaemia.",paths:[["front",[[-.30,.848],[-.15,.842],[0,.840],[.15,.842],[.30,.848]]]]},
-{id:"mastectomy",system:"other",name:"Mastectomy / breast surgery scar",appearance:"Long curved chest-wall scar.",suggests:"Previous mastectomy or major breast surgery.",look:"Axillary surgery, ipsilateral lymphoedema and radiotherapy change.",examiner:"Complications of axillary surgery?",pearl:"Inspect the ipsilateral arm for lymphoedema.",paths:[["front",[[.08,.735],[.22,.725],[.38,.724],[.52,.735]]]]}
+{id:"sternotomy",system:"cardio",plane:"anterior chest",side:"midline",name:"Median sternotomy",appearance:"Vertical midline scar over the sternum.",suggests:"Previous CABG, valve surgery or other open cardiac surgery.",look:"Leg/forearm harvest scars, valve click, pacemaker/ICD, heart-failure signs.",examiner:"Which operations use a median sternotomy? Which CABG conduits can be used?",pearl:"Sternotomy plus medial leg harvest scar strongly suggests CABG.",paths:[{surface:"anterior",region:"chest",points:[[0,.845],[0,.815],[0,.785],[0,.750],[0,.715],[0,.685]]}]},
+{id:"pacemaker",system:"cardio",plane:"left anterior infraclavicular",side:"left",name:"Pacemaker / ICD scar",appearance:"Short infraclavicular healed scar, sometimes with a palpable device.",suggests:"Permanent pacemaker or ICD insertion.",look:"Device contour, sternotomy, arrhythmia/cardiomyopathy and heart-failure signs.",examiner:"Common indications for permanent pacing or ICD?",pearl:"Inspect both infraclavicular fossae.",paths:[{surface:"anterior",region:"chest",points:[[.38,.815],[.50,.812],[.60,.807]]}]},
+{id:"carotid",system:"cardio",plane:"left anterolateral neck",side:"left",name:"Carotid endarterectomy scar",appearance:"Oblique scar along the anterior border of sternocleidomastoid.",suggests:"Previous carotid endarterectomy.",look:"Residual focal neurology and vascular disease elsewhere.",examiner:"When is carotid endarterectomy considered?",pearl:"Think systemic atherosclerosis.",paths:[{surface:"anterolateral-left",region:"neck",points:[[-.18,.865],[-.05,.895],[.06,.925]]}]},
+{id:"radial",system:"cardio",plane:"left volar-radial forearm",side:"left",name:"Radial artery harvest scar",appearance:"Longitudinal scar on the volar-radial forearm.",suggests:"Radial artery harvest for CABG.",look:"Median sternotomy and saphenous-vein harvest scar.",examiner:"Which arterial CABG conduits are used?",pearl:"Inspect the forearms as well as chest and legs.",paths:[{surface:"anterior",region:"leftForearm",points:[[-.12,.615],[-.08,.575],[-.04,.535],[0,.495]]}]},
+{id:"saphenous",system:"cardio",plane:"right medial leg",side:"right",name:"Saphenous vein harvest scar",appearance:"Longitudinal scar along the medial leg.",suggests:"Great saphenous vein harvest, usually for CABG.",look:"Median sternotomy and possible radial-artery harvest scar.",examiner:"Which venous conduit is commonly used for CABG?",pearl:"Classic combination with sternotomy.",paths:[{surface:"medial-right",region:"rightLeg",points:[[0,.415],[0,.345],[0,.275],[0,.205],[0,.145]]}]},
+{id:"thoracotomy",system:"resp",plane:"left posterolateral chest",side:"left",name:"Posterolateral thoracotomy scar",appearance:"Long curved posterolateral chest scar following an intercostal space.",suggests:"Previous major thoracic surgery such as lung resection.",look:"Drain scars, reduced expansion, clubbing and altered breath sounds.",examiner:"Which procedures may use a posterolateral thoracotomy?",pearl:"Best seen from the side/back.",paths:[{surface:"posterolateral-left",region:"chest",points:[[-.38,.765],[-.20,.742],[0,.715],[.18,.690],[.34,.665]]}]},
+{id:"chestdrain",system:"resp",plane:"left lateral chest",side:"left",name:"Chest-drain scar",appearance:"Small lateral intercostal scar in the safe-triangle region.",suggests:"Previous intercostal drain.",look:"Thoracotomy and signs of pleural/lung disease.",examiner:"Describe the safe triangle.",pearl:"Easy to miss unless you inspect the lateral chest.",paths:[{surface:"lateral-left",region:"chest",points:[[-.08,.665],[.03,.662],[.12,.657]]}]},
+{id:"kocher",system:"abdo",plane:"right anterior subcostal",side:"right",name:"Kocher scar — right subcostal",appearance:"Curved right-subcostal incision parallel to the costal margin.",suggests:"Open cholecystectomy or other hepatobiliary surgery.",look:"Jaundice, hepatomegaly and other abdominal scars.",examiner:"Which operations use a right-subcostal incision?",pearl:"Patient right appears on your left when facing them.",paths:[{surface:"anterior",region:"upperAbdomen",points:[[-.78,.655],[-.58,.665],[-.36,.670],[-.12,.665]]}]},
+{id:"mercedes",system:"abdo",plane:"bilateral anterior subcostal",side:"bilateral",name:"Mercedes-Benz scar",appearance:"Bilateral subcostal chevron scar meeting centrally with a short superior midline extension.",suggests:"Liver transplantation or major hepatobiliary surgery.",look:"Jaundice, ascites, transplant clues and immunosuppression effects.",examiner:"Complications after liver transplantation?",pearl:"The short central limb points superiorly toward the xiphoid.",paths:[{surface:"anterior",region:"upperAbdomen",points:[[-.82,.642],[-.58,.657],[-.30,.668],[0,.670]]},{surface:"anterior",region:"upperAbdomen",points:[[0,.670],[.30,.668],[.58,.657],[.82,.642]]},{surface:"anterior",region:"upperAbdomen",points:[[0,.670],[0,.702]]}]},
+{id:"midline",system:"abdo",plane:"anterior abdominal midline",side:"midline",name:"Midline laparotomy scar",appearance:"Vertical abdominal midline scar.",suggests:"Previous major intra-abdominal surgery; exact operation is nonspecific.",look:"Incisional hernia, stoma, masses and other scars.",examiner:"What complications may follow laparotomy?",pearl:"Do not overcall the exact operation from a generic midline scar.",paths:[{surface:"anterior",region:"abdomen",points:[[0,.650],[0,.610],[0,.570],[0,.530],[0,.490]]}]},
+{id:"appendix",system:"abdo",plane:"right anterior iliac fossa",side:"right",name:"Lanz / gridiron appendicectomy scar",appearance:"Short right-iliac-fossa scar; Lanz is more transverse, gridiron more oblique.",suggests:"Previous open appendicectomy.",look:"Other abdominal scars or port sites.",examiner:"How do Lanz and gridiron incisions differ?",pearl:"Use both location and orientation.",paths:[{surface:"anterior",region:"lowerAbdomen",points:[[-.72,.525],[-.55,.517],[-.38,.510]]}]},
+{id:"pfannenstiel",system:"abdo",plane:"anterior suprapubic",side:"midline",name:"Pfannenstiel scar",appearance:"Low gently curved transverse suprapubic scar.",suggests:"Caesarean section or other pelvic/gynaecological surgery.",look:"Other pelvic scars.",examiner:"Which operations use a Pfannenstiel incision?",pearl:"It sits very low; adequate exposure matters.",paths:[{surface:"anterior",region:"suprapubic",points:[[-.72,.485],[-.36,.477],[0,.474],[.36,.477],[.72,.485]]}]},
+{id:"ports",system:"abdo",plane:"anterior abdominal wall",side:"multiple",name:"Laparoscopic port scars",appearance:"Several small punctate or short scars, often including the umbilical region.",suggests:"Previous laparoscopic surgery.",look:"Port distribution, which can suggest the operation.",examiner:"Port-site complications?",pearl:"Small port scars may be diagnostically specific.",dots:[{surface:"anterior",region:"abdomen",point:[0,.565]},{surface:"anterior",region:"upperAbdomen",point:[0,.625]},{surface:"anterior",region:"lowerAbdomen",point:[-.52,.525]},{surface:"anterior",region:"lowerAbdomen",point:[.52,.525]}]},
+{id:"inguinal",system:"abdo",plane:"right anterior groin",side:"right",name:"Inguinal hernia repair scar",appearance:"Oblique scar just above the inguinal ligament.",suggests:"Previous open inguinal hernia repair.",look:"Recurrence and contralateral hernia.",examiner:"Complications of open inguinal hernia repair?",pearl:"Inspect both groins where appropriate.",paths:[{surface:"anterior",region:"groin",points:[[-.28,.472],[-.50,.463],[-.72,.452]]}]},
+{id:"renalTx",system:"renal",plane:"right anterior iliac fossa",side:"right",name:"Renal transplant scar",appearance:"Curved Rutherford–Morrison / hockey-stick scar in an iliac fossa.",suggests:"Previous renal transplantation.",look:"Transplant kidney, AV fistula, steroid effects and immunosuppression complications.",examiner:"Why is a graft placed in an iliac fossa?",pearl:"Transplant scar plus AV fistula is a classic renal combination.",paths:[{surface:"anterior",region:"lowerAbdomen",points:[[-.82,.545],[-.78,.520],[-.64,.495],[-.42,.477],[-.18,.470]]}]},
+{id:"fistula",system:"renal",plane:"right anterior forearm",side:"right",name:"AV fistula / dialysis access",appearance:"Dialysis-access scar on the forearm.",suggests:"Current or previous haemodialysis.",look:"Thrill, bruit, aneurysmal segments and other CKD clues.",examiner:"How would you examine an AV fistula?",pearl:"Look, feel for a thrill, then auscultate for a bruit.",paths:[{surface:"anterior",region:"rightForearm",points:[[0,.605],[0,.565],[0,.525],[0,.490]]}]},
+{id:"nephrectomy",system:"renal",plane:"right flank / posterolateral loin",side:"right",name:"Nephrectomy / loin scar",appearance:"Long oblique or curved flank/loin incision.",suggests:"Previous nephrectomy or retroperitoneal renal surgery.",look:"Renal impairment, hypertension and other renal scars.",examiner:"Common indications for nephrectomy?",pearl:"Best appreciated from the side/back.",paths:[{surface:"posterolateral-right",region:"abdomen",points:[[-.38,.625],[-.18,.612],[.02,.595],[.22,.575],[.38,.555]]}]},
+{id:"thyroid",system:"other",plane:"low anterior neck",side:"midline",name:"Thyroidectomy scar",appearance:"Low transverse gently curved collar scar.",suggests:"Previous thyroid surgery.",look:"Voice change, recurrent goitre and hypocalcaemia.",examiner:"Important complications after thyroidectomy?",pearl:"Think recurrent laryngeal nerve injury and hypocalcaemia.",paths:[{surface:"anterior",region:"neck",points:[[-.68,.850],[-.35,.845],[0,.842],[.35,.845],[.68,.850]]}]},
+{id:"mastectomy",system:"other",plane:"left anterior chest wall",side:"left",name:"Mastectomy / breast surgery scar",appearance:"Long curved unilateral chest-wall scar.",suggests:"Previous mastectomy or major breast surgery.",look:"Axillary surgery, ipsilateral lymphoedema and radiotherapy change.",examiner:"Complications of axillary surgery?",pearl:"Inspect the ipsilateral arm for lymphoedema.",paths:[{surface:"anterior",region:"chest",points:[[.12,.755],[.34,.742],[.58,.740],[.78,.750]]}]}
 ];
 
 const stage=document.getElementById("stage"),loading=document.getElementById("loading"),tip=document.getElementById("tip");
@@ -93,28 +93,81 @@ function addShorts(){
   const hip=new THREE.Mesh(new THREE.CylinderGeometry(top,bottom,len,48,1,true),mat);hip.position.set(center.x,y,center.z);hip.scale.z=.58;hip.castShadow=true;scene.add(hip);
   for(const s of [-1,1]){const leg=new THREE.Mesh(new THREE.CylinderGeometry(.105*height,.115*height,.12*height,36),mat);leg.position.set(center.x+s*.115*height,bounds.min.y+height*.32,center.z);leg.scale.z=.63;leg.castShadow=true;scene.add(leg)}
 }
-function source(surface,u,yn){
-  const sz=new THREE.Vector3();bounds.getSize(sz);const y=bounds.min.y+yn*sz.y,cx=(bounds.min.x+bounds.max.x)/2,cz=(bounds.min.z+bounds.max.z)/2,m=Math.max(sz.x,sz.z)*1.3;
-  let xHalf=sz.x*.5;
-  if(Math.abs(u)<.60){
-    if(yn>.84)xHalf=sz.x*.22;
-    else if(yn>.48)xHalf=sz.x*.32;
-    else xHalf=sz.x*.28;
+function regionFrame(region,yn){
+  const sz=new THREE.Vector3();bounds.getSize(sz);
+  const cx=(bounds.min.x+bounds.max.x)/2, cz=(bounds.min.z+bounds.max.z)/2;
+  let x=cx,z=cz,w=sz.x*.28,d=sz.z*.42;
+  if(region==="neck"){w=sz.x*.115;d=sz.z*.20}
+  else if(region==="chest"){w=sz.x*.305;d=sz.z*.42}
+  else if(region==="upperAbdomen"){w=sz.x*.275;d=sz.z*.38}
+  else if(region==="abdomen"){w=sz.x*.255;d=sz.z*.36}
+  else if(region==="lowerAbdomen"){w=sz.x*.245;d=sz.z*.34}
+  else if(region==="suprapubic"){w=sz.x*.225;d=sz.z*.31}
+  else if(region==="groin"){w=sz.x*.235;d=sz.z*.30}
+  else if(region==="leftForearm"){x=cx+sz.x*.435;w=sz.x*.065;d=sz.z*.12}
+  else if(region==="rightForearm"){x=cx-sz.x*.435;w=sz.x*.065;d=sz.z*.12}
+  else if(region==="rightLeg"){x=cx-sz.x*.135;w=sz.x*.065;d=sz.z*.14}
+  else if(region==="leftLeg"){x=cx+sz.x*.135;w=sz.x*.065;d=sz.z*.14}
+  return {cx:x,cz:z,w,d,sz};
+}
+function surfaceAngle(surface){
+  return ({anterior:0,"anterolateral-left":Math.PI/4,"lateral-left":Math.PI/2,"posterolateral-left":3*Math.PI/4,posterior:Math.PI,"posterolateral-right":-3*Math.PI/4,"lateral-right":-Math.PI/2,"anterolateral-right":-Math.PI/4,"medial-right":Math.PI/2,"medial-left":-Math.PI/2})[surface] ?? 0;
+}
+function source(surface,region,u,yn){
+  const f=regionFrame(region,yn), y=bounds.min.y+yn*f.sz.y;
+  let phi=surfaceAngle(surface);
+  const out=new THREE.Vector3(Math.sin(phi),0,Math.cos(phi));
+  const tangent=new THREE.Vector3(Math.cos(phi),0,-Math.sin(phi));
+  const span=Math.abs(Math.sin(phi))*f.d + Math.abs(Math.cos(phi))*f.w;
+  let reach=Math.max(f.w,f.d)*3.2;
+  // Medial limb surfaces must start between the limbs rather than beyond the opposite limb.
+  if(surface==="medial-right"||surface==="medial-left") reach=Math.max(f.w*2.2,height*.018);
+  const origin=new THREE.Vector3(f.cx,y,f.cz).addScaledVector(out,reach).addScaledVector(tangent,u*span);
+  return [origin,out.clone().multiplyScalar(-1)];
+}
+function bodyHit(surface,region,u,yn){
+  const trials=[1,.96,.90,.84,.76];
+  for(const q of trials){
+    const [o,d]=source(surface,region,u*q,yn);
+    ray.set(o,d);
+    const hs=ray.intersectObjects(bodyMeshes,false);
+    if(hs.length){
+      const h=hs[0];let n=new THREE.Vector3();
+      if(h.face)n.copy(h.face.normal).applyMatrix3(new THREE.Matrix3().getNormalMatrix(h.object.matrixWorld)).normalize();
+      else n.copy(d).negate();
+      return {p:h.point.clone().addScaledVector(n,height*.0014),n};
+    }
   }
-  if(surface==="front")return[new THREE.Vector3(cx+u*xHalf,y,bounds.max.z+m),new THREE.Vector3(0,0,-1)];
-  if(surface==="back")return[new THREE.Vector3(cx+u*xHalf,y,bounds.min.z-m),new THREE.Vector3(0,0,1)];
-  const z=cz+u*sz.z*.5;if(surface==="left")return[new THREE.Vector3(bounds.max.x+m,y,z),new THREE.Vector3(-1,0,0)];
-  return[new THREE.Vector3(bounds.min.x-m,y,z),new THREE.Vector3(1,0,0)];
+  return null;
 }
-function bodyHit(surface,u,yn){
-  for(const f of [1,.95,.88,.80]){const [o,d]=source(surface,u*f,yn);ray.set(o,d);const h=ray.intersectObjects(bodyMeshes,false)[0];if(h){let n=new THREE.Vector3();if(h.face){n.copy(h.face.normal).applyMatrix3(new THREE.Matrix3().getNormalMatrix(h.object.matrixWorld)).normalize()}else n.copy(d).negate();return{p:h.point.clone().addScaledVector(n,height*.002),n}}}return null
+function curveMesh(f,path){
+  const surface=path.surface,region=path.region,controlsList=path.points,pts=[];
+  for(let k=0;k<controlsList.length-1;k++){
+    const a=controlsList[k],b=controlsList[k+1];
+    for(let j=0;j<12;j++){
+      const t=j/12,h=bodyHit(surface,region,a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t);
+      if(h)pts.push(h.p);
+    }
+  }
+  const z=controlsList.at(-1),last=bodyHit(surface,region,z[0],z[1]);if(last)pts.push(last.p);if(pts.length<2)return;
+  const curve=new THREE.CatmullRomCurve3(pts,false,"centripetal"),r=height*.00155;
+  const v=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(36,pts.length*2),r,7,false),scarMat(f.system));
+  const c=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(36,pts.length*2),r*.22,6,false),scarCore(f.system));
+  const hit=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(36,pts.length*2),r*6.8,7,false),hitMat);
+  for(const o of [v,c,hit]){o.userData.finding=f;scene.add(o)}
+  visuals.push(v,c);hits.push(hit);groups.get(f.id).visuals.push(v,c);groups.get(f.id).hits.push(hit);
 }
-function curveMesh(f,surface,controlsList){
-  const pts=[];for(let k=0;k<controlsList.length-1;k++){const a=controlsList[k],b=controlsList[k+1];for(let j=0;j<10;j++){const t=j/10,h=bodyHit(surface,a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t);if(h)pts.push(h.p)}}const z=controlsList.at(-1),last=bodyHit(surface,z[0],z[1]);if(last)pts.push(last.p);if(pts.length<2)return;
-  const curve=new THREE.CatmullRomCurve3(pts,false,"centripetal"),r=height*.00175;const v=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(32,pts.length*2),r,7,false),scarMat(f.system));const c=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(32,pts.length*2),r*.26,6,false),scarCore(f.system));const hit=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(32,pts.length*2),r*6.0,7,false),hitMat);for(const o of [v,c,hit]){o.userData.finding=f;scene.add(o)}visuals.push(v,c);hits.push(hit);groups.get(f.id).visuals.push(v,c);groups.get(f.id).hits.push(hit)
+function dotMesh(f,dot){
+  const h=bodyHit(dot.surface,dot.region,dot.point[0],dot.point[1]);if(!h)return;
+  const r=height*.0042,v=new THREE.Mesh(new THREE.SphereGeometry(r,16,10),scarMat(f.system));
+  v.position.copy(h.p);const hit=new THREE.Mesh(new THREE.SphereGeometry(r*3.8,12,8),hitMat);hit.position.copy(h.p);
+  v.userData.finding=f;hit.userData.finding=f;scene.add(v,hit);visuals.push(v);hits.push(hit);groups.get(f.id).visuals.push(v);groups.get(f.id).hits.push(hit);
 }
-function dotMesh(f,surface,[u,yn]){const h=bodyHit(surface,u,yn);if(!h)return;const r=height*.0045;const v=new THREE.Mesh(new THREE.SphereGeometry(r,16,10),scarMat(f.system));v.position.copy(h.p);const hit=new THREE.Mesh(new THREE.SphereGeometry(r*3.5,12,8),hitMat);hit.position.copy(h.p);v.userData.finding=f;hit.userData.finding=f;scene.add(v,hit);visuals.push(v);hits.push(hit);groups.get(f.id).visuals.push(v);groups.get(f.id).hits.push(hit)}
-function buildScars(){for(const f of data)groups.set(f.id,{f,visuals:[],hits:[]});for(const f of data){for(const p of f.paths||[])curveMesh(f,p[0],p[1]);for(const d of f.dots||[])dotMesh(f,d[0],d[1])}updateVisibility()}
+function buildScars(){
+  for(const f of data)groups.set(f.id,{f,visuals:[],hits:[]});
+  for(const f of data){for(const p of f.paths||[])curveMesh(f,p);for(const d of f.dots||[])dotMesh(f,d)}
+  updateVisibility();
+}
 function updateVisibility(){for(const g of groups.values()){const on=g.f.system===currentSystem;g.visuals.forEach(o=>o.visible=on);g.hits.forEach(o=>o.visible=on)}applySelection();document.getElementById("badge").textContent=(mode==="explore"?"Explore":"PACES")+" • "+({cardio:"Cardiovascular",resp:"Respiratory",abdo:"Abdominal",renal:"Renal",other:"Neck / other"}[currentSystem])}
 function applySelection(){for(const g of groups.values()){const active=!selected||selected.id===g.f.id;for(const o of g.visuals){o.material.opacity=active?(o.material.transparent?.45:1):.2;o.material.transparent=!active||o.material.transparent;o.material.needsUpdate=true}}}
 function selectFinding(f){selected=f;document.getElementById("title").textContent=mode==="exam"?"Identify this scar":f.name;document.getElementById("kicker").textContent=mode==="exam"?"PACES station":"Surgical scar";document.getElementById("appearance").textContent=f.appearance;document.getElementById("suggests").textContent=f.suggests;document.getElementById("look").textContent=f.look;document.getElementById("examiner").textContent=f.examiner;document.getElementById("pearl").textContent=f.pearl;document.getElementById("examBox").style.display=mode==="exam"?"block":"none";document.getElementById("infoBody").style.display=mode==="exam"?"none":"block";document.getElementById("card").style.display="block";applySelection()}
