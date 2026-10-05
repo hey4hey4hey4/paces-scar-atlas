@@ -31,7 +31,7 @@ button{font:inherit}.btn{border:1px solid var(--line);background:#fff;color:var(
 </head>
 <body>
 <div class="app">
-<header class="top"><div class="brand"><strong>PACES Clinical Examination</strong><div class="sep"></div><span>Interactive surgical scars</span></div><div class="actions"><button id="explore" class="btn active">Explore</button><button id="exam" class="btn">PACES mode</button><button id="reset" class="btn">Reset</button></div></header>
+<header class="top"><div class="brand"><strong>PACES Clinical Examination</strong><div class="sep"></div><span>Interactive surgical scars • anatomical-base rebuild</span></div><div class="actions"><button id="explore" class="btn active">Explore</button><button id="exam" class="btn">PACES mode</button><button id="reset" class="btn">Reset</button></div></header>
 <div class="main">
 <aside class="side"><div class="side-title">Scar groups</div><button class="sys active" data-s="cardio">Cardiovascular</button><button class="sys" data-s="resp">Respiratory</button><button class="sys" data-s="abdo">Abdominal</button><button class="sys" data-s="renal">Renal</button><button class="sys" data-s="other">Neck / other</button><div class="note">Drag through 360°. Scars are anchored to explicit anatomical surfaces: anterior, lateral, posterolateral, flank or medial limb.</div></aside>
 <main class="viewer">
@@ -43,10 +43,10 @@ button{font:inherit}.btn{border:1px solid var(--line);background:#fff;color:var(
 
 <script type="module">
 import * as THREE from "three";
-import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
+import {OBJLoader} from "three/addons/loaders/OBJLoader.js";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
-const MODEL="https://cdn.jsdelivr.net/gh/UMRAM-Bilkent/supine-human-model@main/assets/human_posed.glb";
+const MODEL="https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/3dobjs/base.obj";
 const data=[
 {id:"sternotomy",system:"cardio",plane:"anterior chest",side:"midline",name:"Median sternotomy",appearance:"Vertical midline scar over the sternum.",suggests:"Previous CABG, valve surgery or other open cardiac surgery.",look:"Leg/forearm harvest scars, valve click, pacemaker/ICD, heart-failure signs.",examiner:"Which operations use a median sternotomy? Which CABG conduits can be used?",pearl:"Sternotomy plus medial leg harvest scar strongly suggests CABG.",paths:[{surface:"anterior",region:"chest",points:[[0,.845],[0,.815],[0,.785],[0,.750],[0,.715],[0,.685]]}]},
 {id:"pacemaker",system:"cardio",plane:"left anterior infraclavicular",side:"left",name:"Pacemaker / ICD scar",appearance:"Short infraclavicular healed scar, sometimes with a palpable device.",suggests:"Permanent pacemaker or ICD insertion.",look:"Device contour, sternotomy, arrhythmia/cardiomyopathy and heart-failure signs.",examiner:"Common indications for permanent pacing or ICD?",pearl:"Inspect both infraclavicular fossae.",paths:[{surface:"anterior",region:"chest",points:[[.38,.815],[.50,.812],[.60,.807]]}]},
@@ -84,7 +84,7 @@ const hitMat=new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:
 
 function fitModel(root){
   root.updateMatrixWorld(true);let b=new THREE.Box3().setFromObject(root),sz=new THREE.Vector3();b.getSize(sz);const scale=1.75/sz.y;root.scale.setScalar(scale);root.updateMatrixWorld(true);b=new THREE.Box3().setFromObject(root);b.getCenter(center);root.position.x-=center.x;root.position.z-=center.z;root.position.y-=b.min.y;root.updateMatrixWorld(true);bounds=new THREE.Box3().setFromObject(root);bounds.getCenter(center);bounds.getSize(sz);height=sz.y;floor.position.set(center.x,bounds.min.y-.008,center.z);
-  root.traverse(o=>{if(o.isMesh){bodyMeshes.push(o);o.castShadow=true;o.receiveShadow=true;if(o.material){o.material=o.material.clone();o.material.roughness=.88;o.material.metalness=0}}});
+  root.traverse(o=>{if(o.isMesh){bodyMeshes.push(o);o.castShadow=true;o.receiveShadow=true;o.material=new THREE.MeshStandardMaterial({color:0xc98f72,roughness:.84,metalness:0,side:THREE.DoubleSide});}});
   buildScars();controls.target.set(center.x,bounds.min.y+height*.56,center.z);const d=height*1.65;camera.position.set(center.x,bounds.min.y+height*.56,center.z+d);controls.minDistance=height*.78;controls.maxDistance=height*2.6;controls.update();loading.style.display="none";
 }
 function addShorts(){
@@ -96,18 +96,19 @@ function addShorts(){
 function regionFrame(region,yn){
   const sz=new THREE.Vector3();bounds.getSize(sz);
   const cx=(bounds.min.x+bounds.max.x)/2, cz=(bounds.min.z+bounds.max.z)/2;
-  let x=cx,z=cz,w=sz.x*.28,d=sz.z*.42;
-  if(region==="neck"){w=sz.x*.115;d=sz.z*.20}
-  else if(region==="chest"){w=sz.x*.305;d=sz.z*.42}
-  else if(region==="upperAbdomen"){w=sz.x*.275;d=sz.z*.38}
-  else if(region==="abdomen"){w=sz.x*.255;d=sz.z*.36}
-  else if(region==="lowerAbdomen"){w=sz.x*.245;d=sz.z*.34}
-  else if(region==="suprapubic"){w=sz.x*.225;d=sz.z*.31}
-  else if(region==="groin"){w=sz.x*.235;d=sz.z*.30}
-  else if(region==="leftForearm"){x=cx+sz.x*.435;w=sz.x*.065;d=sz.z*.12}
-  else if(region==="rightForearm"){x=cx-sz.x*.435;w=sz.x*.065;d=sz.z*.12}
-  else if(region==="rightLeg"){x=cx-sz.x*.135;w=sz.x*.065;d=sz.z*.14}
-  else if(region==="leftLeg"){x=cx+sz.x*.135;w=sz.x*.065;d=sz.z*.14}
+  // Local anatomical half-width / half-depth, in fractions of standing height.
+  let x=cx,z=cz,w=height*.125,d=height*.070;
+  if(region==="neck"){w=height*.045;d=height*.045}
+  else if(region==="chest"){w=height*.145;d=height*.078}
+  else if(region==="upperAbdomen"){w=height*.125;d=height*.068}
+  else if(region==="abdomen"){w=height*.118;d=height*.067}
+  else if(region==="lowerAbdomen"){w=height*.120;d=height*.070}
+  else if(region==="suprapubic"){w=height*.105;d=height*.067}
+  else if(region==="groin"){w=height*.115;d=height*.066}
+  else if(region==="leftForearm"){x=cx+height*.235;w=height*.032;d=height*.035}
+  else if(region==="rightForearm"){x=cx-height*.235;w=height*.032;d=height*.035}
+  else if(region==="rightLeg"){x=cx-height*.062;w=height*.045;d=height*.050}
+  else if(region==="leftLeg"){x=cx+height*.062;w=height*.045;d=height*.050}
   return {cx:x,cz:z,w,d,sz};
 }
 function surfaceAngle(surface){
@@ -126,16 +127,20 @@ function source(surface,region,u,yn){
   return [origin,out.clone().multiplyScalar(-1)];
 }
 function bodyHit(surface,region,u,yn){
-  const trials=[1,.96,.90,.84,.76];
+  const trials=[1,.97,.92,.86,.78];
+  const phi=surfaceAngle(surface);
+  const wanted=new THREE.Vector3(Math.sin(phi),0,Math.cos(phi));
   for(const q of trials){
     const [o,d]=source(surface,region,u*q,yn);
     ray.set(o,d);
     const hs=ray.intersectObjects(bodyMeshes,false);
-    if(hs.length){
-      const h=hs[0];let n=new THREE.Vector3();
+    for(const h of hs){
+      let n=new THREE.Vector3();
       if(h.face)n.copy(h.face.normal).applyMatrix3(new THREE.Matrix3().getNormalMatrix(h.object.matrixWorld)).normalize();
       else n.copy(d).negate();
-      return {p:h.point.clone().addScaledVector(n,height*.0014),n};
+      // Keep only the surface actually facing the requested anatomical plane.
+      if(n.dot(wanted) < .30) continue;
+      return {p:h.point.clone().addScaledVector(n,height*.0012),n};
     }
   }
   return null;
@@ -184,7 +189,16 @@ renderer.domElement.addEventListener("pointerleave",()=>tip.style.display="none"
 renderer.domElement.addEventListener("click",e=>{const r=renderer.domElement.getBoundingClientRect();pointer.x=((e.clientX-r.left)/r.width)*2-1;pointer.y=-((e.clientY-r.top)/r.height)*2+1;ray.setFromCamera(pointer,camera);const h=ray.intersectObjects(hits.filter(o=>o.visible),false)[0];if(h)selectFinding(h.object.userData.finding)});
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}new ResizeObserver(resize).observe(stage);resize();
-new GLTFLoader().load(MODEL,g=>{scene.add(g.scene);fitModel(g.scene);setView("front")},undefined,err=>{console.error(err);loading.innerHTML="<div><b>3D patient failed to load.</b><br><small>Please refresh once. If it persists, tell me what browser you are using.</small></div>"});
+new OBJLoader().load(MODEL,obj=>{
+  const body=obj.getObjectByName("body") || obj;
+  if(body.parent) body.parent.remove(body);
+  scene.add(body);
+  fitModel(body);
+  setView("front");
+},undefined,err=>{
+  console.error(err);
+  loading.innerHTML="<div><b>Anatomical patient model failed to load.</b><br><small>Please refresh once. If it persists, tell me the browser and device.</small></div>";
+});
 function loop(){controls.update();renderer.render(scene,camera);requestAnimationFrame(loop)}loop();
 </script>
 </body>
