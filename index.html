@@ -7,9 +7,9 @@
 <style>
 :root{--bg:#eaf0f6;--line:#d7e0e9;--text:#10223f;--blue:#0b69f1}*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}.app{height:100%;min-height:700px;display:flex;flex-direction:column}.top{height:62px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;gap:12px}.brand{display:flex;align-items:center;gap:12px}.brand strong{font-size:20px}.brand span{font-size:12px;color:#52627a}.actions{display:flex;gap:8px}.btn{font:inherit;border:1px solid var(--line);background:#fff;color:var(--text);padding:8px 11px;border-radius:10px;cursor:pointer}.btn.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}.main{flex:1;min-height:0;display:grid;grid-template-columns:205px 1fr}.side{background:#f8fbff;border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:7px}.side-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#7c899a;padding:3px 10px 8px}.sys{font:inherit;border:1px solid transparent;background:transparent;color:#293b56;text-align:left;border-radius:10px;padding:10px 11px;cursor:pointer}.sys.active{background:#dcecff;color:#075fd9;border-color:#c7ddfb;font-weight:700}.sys:before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;background:var(--sc)}.sys[data-s=cardio]{--sc:#8b2f54}.sys[data-s=resp]{--sc:#bc4c36}.sys[data-s=abdo]{--sc:#99612e}.sys[data-s=renal]{--sc:#6b4a92}.sys[data-s=other]{--sc:#2f7775}.note{margin-top:auto;padding:10px;color:#7a8798;font-size:11px;line-height:1.45}.viewer{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 28%,#fff 0,#eef4fa 52%,#dfe8f1 100%)}#stage{position:absolute;inset:0}#stage canvas{display:block;width:100%;height:100%;cursor:grab}.loading{position:absolute;inset:0;display:grid;place-items:center;background:#eef4f9;z-index:30;color:#617087;text-align:center;padding:30px}.badge,.legend,.hint{position:absolute;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:10px;color:#68778b;font-size:12px;z-index:7}.legend{left:18px;top:18px;padding:8px 10px}.badge{right:18px;top:18px;padding:8px 10px}.hint{left:18px;bottom:18px;padding:8px 10px}.views{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:7px;padding:8px;background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:14px;z-index:8}.views .btn{min-width:68px}.tip{position:absolute;display:none;z-index:12;background:#10223f;color:#fff;padding:6px 8px;border-radius:7px;font-size:12px;pointer-events:none;white-space:nowrap}.card{position:absolute;right:22px;top:66px;width:min(430px,calc(100% - 44px));background:rgba(255,255,255,.98);border:1px solid #d5deea;border-radius:14px;box-shadow:0 18px 48px rgba(29,48,78,.18);z-index:11;display:none;overflow:hidden}.card-head{display:flex;justify-content:space-between;gap:12px;padding:15px 16px 12px;border-bottom:1px solid #e7edf3}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#7a879b;margin-bottom:4px}.card h2{margin:0;font-size:19px}.close{border:0;background:transparent;font-size:22px;color:#65748a;cursor:pointer}.body{padding:12px 16px 15px;max-height:68vh;overflow:auto}.preview{margin:0 0 10px;border:1px solid #e2e8f0;border-radius:11px;overflow:hidden;background:#eef2f7}.preview img{width:100%;height:180px;display:block;object-fit:cover;background:#eef2f7}.preview-cap{padding:7px 9px;background:#fff;color:#718096;font-size:10.5px;border-top:1px solid #e8edf2;display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.preview-cap a{color:#0b69f1;text-decoration:none;white-space:nowrap}.photo-missing{display:none;margin:0 0 10px;border:1px solid #e2e8f0;border-radius:11px;overflow:hidden;background:#d9ad8d}.photo-missing canvas{width:100%;height:170px;display:block}.illus-cap{padding:7px 9px;background:#fff;color:#718096;font-size:10.5px;border-top:1px solid #e8edf2}.row{padding:8px 0;border-bottom:1px solid #edf1f5}.lab{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#7d899a;margin-bottom:4px}.txt,.pearl{font-size:13.5px;line-height:1.44;color:#273954}.pearl{margin-top:10px;background:#eff6ff;border:1px solid #d8e8fc;border-radius:10px;padding:10px}.examBox{display:none;margin:14px 16px 16px;padding:13px;background:#f6f8fb;border:1px solid #e1e7ef;border-radius:10px;font-size:13px;color:#526178}.reveal{width:100%;margin-top:10px;border:0;border-radius:9px;padding:9px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}@media(max-width:880px){.main{grid-template-columns:1fr}.side{display:none}.brand span{display:none}.hint{display:none}.card{left:12px;right:12px;top:66px;width:auto}.views{width:calc(100% - 24px)}.views .btn{min-width:0;flex:1}}
 </style></head><body><div class="app">
-<header class="top"><div class="brand"><strong>PACES Clinical Examination</strong><span>3D Surgical Scar Atlas • anatomy review v10</span></div><div class="actions"><button id="explore" class="btn active">Explore</button><button id="exam" class="btn">PACES mode</button><button id="reset" class="btn">Reset</button></div></header>
-<div class="main"><aside class="side"><div class="side-title">Scar groups</div><button class="sys active" data-s="cardio">Cardiovascular</button><button class="sys" data-s="resp">Respiratory</button><button class="sys" data-s="abdo">Abdominal</button><button class="sys" data-s="renal">Renal</button><button class="sys" data-s="other">Neck / other</button><div class="note">v10 replaces the previous outside-in scar projection with an anatomy-centred surface method. Torso and neck scars are now cast outward from the internal spinal/neck axis, so the first surface hit is the intended body wall rather than an arm, chest edge or neighbouring region. Wrap-around thoracotomy and nephrectomy scars are sampled directly around the torso as continuous angular arcs. All major scar positions were rebuilt against fixed anatomical height landmarks rather than repeatedly nudging the old coordinates.</div></aside>
-<main class="viewer"><div id="stage"></div><div id="loading" class="loading">Loading anatomical body and calibrating scar planes…</div><div class="legend">Muted lines = healed surgical scars • click a scar</div><div id="badge" class="badge">Anatomy review v10 • Cardiovascular</div><div class="hint">Drag 360° • wheel/pinch to zoom</div><div id="tip" class="tip"></div><div class="views"><button class="btn view active" data-v="front">Front</button><button class="btn view" data-v="left">Left</button><button class="btn view" data-v="back">Back</button><button class="btn view" data-v="right">Right</button></div>
+<header class="top"><div class="brand"><strong>PACES Clinical Examination</strong><span>3D Surgical Scar Atlas • anatomy review v11</span></div><div class="actions"><button id="explore" class="btn active">Explore</button><button id="exam" class="btn">PACES mode</button><button id="reset" class="btn">Reset</button></div></header>
+<div class="main"><aside class="side"><div class="side-title">Scar groups</div><button class="sys active" data-s="cardio">Cardiovascular</button><button class="sys" data-s="resp">Respiratory</button><button class="sys" data-s="abdo">Abdominal</button><button class="sys" data-s="renal">Renal</button><button class="sys" data-s="other">Neck / other</button><div class="note">v11 re-audits every scar against the model's measured skeletal landmarks. The previous absolute body-height estimates were too low for several lower-abdominal scars. Pfannenstiel/C-section, inguinal, renal-transplant, appendicectomy and laparoscopic ports are now tied directly to pubic, iliac and umbilical landmark levels. Chest-drain placement is raised into the lateral 4th/5th-intercostal safe-triangle region. Limb harvest/access scars are now projected from inside the relevant limb rather than from outside the whole body.</div></aside>
+<main class="viewer"><div id="stage"></div><div id="loading" class="loading">Loading anatomical body and calibrating scar planes…</div><div class="legend">Muted lines = healed surgical scars • click a scar</div><div id="badge" class="badge">Anatomy review v11 • Cardiovascular</div><div class="hint">Drag 360° • wheel/pinch to zoom</div><div id="tip" class="tip"></div><div class="views"><button class="btn view active" data-v="front">Front</button><button class="btn view" data-v="left">Left</button><button class="btn view" data-v="back">Back</button><button class="btn view" data-v="right">Right</button></div>
 <section id="card" class="card"><div class="card-head"><div><div class="kicker">Surgical scar</div><h2 id="title"></h2></div><button id="close" class="close">×</button></div><div id="examBox" class="examBox"><b>Identify this scar first.</b><div style="margin-top:4px">Say what operation it suggests and what associated signs you would seek.</div><button id="reveal" class="reveal">Reveal answer</button></div><div id="infoBody" class="body"><div id="photoBox" class="preview"><img id="scarPhoto" alt="" loading="lazy"><div class="preview-cap"><span id="photoCaption"></span><a id="photoCredit" target="_blank" rel="noopener">source / licence</a></div></div><div id="photoMissing" class="photo-missing"><canvas id="scarIllustration" width="760" height="260"></canvas><div class="illus-cap">Anatomical location + typical healed-scar appearance • illustration, not a patient photograph</div></div><div class="row"><div class="lab">Appearance</div><div id="appearance" class="txt"></div></div><div class="row"><div class="lab">Suggests</div><div id="suggests" class="txt"></div></div><div class="row"><div class="lab">Look for</div><div id="look" class="txt"></div></div><div class="row"><div class="lab">Examiner may ask</div><div id="examiner" class="txt"></div></div><div class="pearl"><b>PACES pearl:</b> <span id="pearl"></span></div></div></section></main></div></div>
 <script type="module">
 import * as THREE from "three";
@@ -58,9 +58,6 @@ function add(id,seeds,dirs,w,filter=null){ribbon(id,surfacePath(seeds,dirs,filte
 function pointSegDist(p,a,b){const ab=b.clone().sub(a),den=ab.lengthSq();if(!den)return p.distanceTo(a);const t=THREE.MathUtils.clamp(p.clone().sub(a).dot(ab)/den,0,1);return p.distanceTo(a.clone().addScaledVector(ab,t))}
 function arcDirs(from,to,n){const out=[];for(let i=0;i<n;i++){const t=i/(n-1),a=THREE.MathUtils.lerp(from,to,t);out.push(new THREE.Vector3(Math.sin(a),0,Math.cos(a)).normalize())}return out}
 
-// The MakeHuman skeleton axis sits inside the torso.  Using it as the ray origin
-// avoids the previous failure mode where an outside-in ray could select an arm,
-// the wrong side of the chest, or a discontinuous surface.
 function axisNodes(){return [A.pel,A.sp4,A.sp3,A.sp2,A.sp1,A.clav,A.neck].filter(Boolean).slice().sort((a,b)=>a.y-b.y)}
 function axisZAt(y){
  const n=axisNodes(); if(y<=n[0].y)return n[0].z;if(y>=n[n.length-1].y)return n[n.length-1].z;
@@ -79,110 +76,103 @@ function surfaceFromInside(origin,dir,maxDist=height*.50){
 }
 function frontSurface(x,y){return surfaceFromInside(new THREE.Vector3(x,y,axisZAt(y)),DIR.front)}
 function aroundSurface(y,a){const d=new THREE.Vector3(Math.sin(a),0,Math.cos(a));return surfaceFromInside(new THREE.Vector3(0,y,axisZAt(y)),d)}
-function frontRibbon(id,seeds,w){
- const pts=[];for(const p of seeds){const h=frontSurface(p.x,p.y);if(h)pts.push(h)}
- ribbon(id,pts,w)
-}
-function aroundRibbon(id,spec,w){
- const pts=[];for(const q of spec){const h=aroundSurface(q.y,q.a);if(h)pts.push(h)}
+function frontRibbon(id,seeds,w){const pts=[];for(const p of seeds){const h=frontSurface(p.x,p.y);if(h)pts.push(h)}ribbon(id,pts,w)}
+function aroundRibbon(id,spec,w){const pts=[];for(const q of spec){const h=aroundSurface(q.y,q.a);if(h)pts.push(h)}ribbon(id,pts,w)}
+function insideRibbon(id,seeds,dirs,w){
+ const pts=[];for(let i=0;i<seeds.length;i++){const d=Array.isArray(dirs)?dirs[Math.min(i,dirs.length-1)]:dirs,h=surfaceFromInside(seeds[i],d,height*.20);if(h)pts.push(h)}
  ribbon(id,pts,w)
 }
 function surfaceDot(id,h,r=height*.0048){
- if(!h)return;
- (pickPaths[id]||(pickPaths[id]=[])).push([h.p.clone()]);
+ if(!h)return;(pickPaths[id]||(pickPaths[id]=[])).push([h.p.clone()]);
  const m=new THREE.Mesh(new THREE.SphereGeometry(r,12,8),new THREE.MeshStandardMaterial({color:COL[SYS[id]],roughness:.9}));
  m.position.copy(h.p);m.scale.set(1.7,.55,.55);m.userData.id=id;scene.add(m);scars.push(m);
  const hm=new THREE.Mesh(new THREE.SphereGeometry(r*5.2,12,10),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));
  hm.position.copy(h.p);hm.userData.id=id;scene.add(hm);hits.push(hm)
 }
 function buildScars(){
- const w=A.shoulderHalf,Y=f=>bounds.min.y+height*f,front=DIR.front;
+ const w=A.shoulderHalf,front=DIR.front;
+ const sternTop=A.clav.y+height*.008,sternBottom=A.xipY+height*.002;
+ const rib56Y=A.xipY+height*.027;
+ const pubicScarY=A.pubicY+height*.010;
+ const mcY=THREE.MathUtils.lerp(A.iliacY,A.umbY,.33);
 
  // CARDIOVASCULAR -----------------------------------------------------------
- // Midline sternum: just below sternal notch to xiphisternum/lower sternum.
- frontRibbon("sternotomy",samples(new THREE.Vector3(0,Y(.801),0),new THREE.Vector3(0,Y(.694),0),30),height*.0028);
+ frontRibbon("sternotomy",samples(new THREE.Vector3(0,sternTop,0),new THREE.Vector3(0,sternBottom,0),30),height*.0028);
 
- // Left infraclavicular device pocket: below clavicle, medial to shoulder.
- const pc=samples(new THREE.Vector3(w*.20,Y(.789),0),new THREE.Vector3(w*.52,Y(.782),0),18);
- frontRibbon("pacemaker",pc,height*.0031);
+ const pcY=A.clav.y-height*.015;
+ frontRibbon("pacemaker",samples(new THREE.Vector3(w*.18,pcY,0),new THREE.Vector3(w*.50,pcY-height*.006,0),18),height*.0030);
 
- // CEA: anterolateral neck, anterior border of SCM; upper end remains below jaw.
- const cea=samples(new THREE.Vector3(w*.12,Y(.823),0),new THREE.Vector3(w*.27,Y(.872),0),24);
- cea.forEach((p,i)=>p.x+=Math.sin(Math.PI*i/(cea.length-1))*w*.015);
+ const cea0=new THREE.Vector3(w*.12,A.clav.y+height*.020,0),cea1=new THREE.Vector3(w*.26,A.neck.y+height*.018,0),cea=samples(cea0,cea1,24);
+ cea.forEach((p,i)=>p.x+=Math.sin(Math.PI*i/(cea.length-1))*w*.014);
  frontRibbon("carotid",cea,height*.0029);
 
- // Radial harvest: volar-radial left forearm.
- const lh=J["l-hand"],le=J["l-elbow"],radialDir=new THREE.Vector3(.34,0,.94).normalize();
- add("radial",samples(mid(lh,le,.14),mid(lh,le,.80),28),radialDir,height*.0028);
+ const lh=J["l-hand"],le=J["l-elbow"];
+ const radialDir=new THREE.Vector3(.55,0,.84).normalize();
+ insideRibbon("radial",samples(mid(lh,le,.14),mid(lh,le,.80),28),radialDir,height*.0028);
 
- // Great saphenous harvest: medial left leg, from medial ankle upwards.
- const la=J["l-ankle"],lk=J["l-knee"],lu=J["l-upper-leg"],medialLeg=new THREE.Vector3(-.96,0,.22).normalize();
- add("saphenous",poly([mid(la,lk,.05),mid(la,lk,.92),mid(lk,lu,.42)],12),medialLeg,height*.0028);
+ const la=J["l-ankle"],lk=J["l-knee"],lu=J["l-upper-leg"];
+ const medialLeg=new THREE.Vector3(-.98,0,.18).normalize();
+ insideRibbon("saphenous",poly([mid(la,lk,.04),mid(la,lk,.92),mid(lk,lu,.42)],12),medialLeg,height*.0028);
 
  // RESPIRATORY --------------------------------------------------------------
- // Classic posterolateral thoracotomy: one continuous 5th/6th-ICS arc,
- // parascapular posterior -> below scapular tip -> anterior axillary.
- const thor=[];for(let i=0;i<72;i++){const t=i/71,a=THREE.MathUtils.lerp(THREE.MathUtils.degToRad(166),THREE.MathUtils.degToRad(38),t),yf=.724-.012*Math.sin(Math.PI*t)-.004*t;thor.push({a,y:Y(yf)})}
+ const thor=[];for(let i=0;i<72;i++){const t=i/71,a=THREE.MathUtils.lerp(THREE.MathUtils.degToRad(166),THREE.MathUtils.degToRad(40),t),y=rib56Y-height*.010*Math.sin(Math.PI*t)-height*.004*t;thor.push({a,y})}
  aroundRibbon("thoracotomy",thor,height*.0032);
 
- // Chest drain: small lateral scar in safe triangle, below thoracotomy.
- surfaceDot("chestdrain",aroundSurface(Y(.683),THREE.MathUtils.degToRad(90)),height*.0045);
+ // Safe-triangle chest-drain scar: lateral chest around 4th/5th ICS, not upper abdomen.
+ const drain=[];for(let i=0;i<14;i++){const t=i/13,a=THREE.MathUtils.lerp(THREE.MathUtils.degToRad(87),THREE.MathUtils.degToRad(93),t),y=rib56Y-height*.004+height*.003*(t-.5);drain.push({a,y})}
+ aroundRibbon("chestdrain",drain,height*.0030);
 
  // ABDOMINAL ---------------------------------------------------------------
- // Right subcostal Kocher (patient right = negative x).
- const ko=samples(new THREE.Vector3(-w*.05,Y(.676),0),new THREE.Vector3(-w*.72,Y(.642),0),28);
- ko.forEach((p,i)=>p.y+=Math.sin(Math.PI*i/(ko.length-1))*height*.007);
- frontRibbon("kocher",ko,height*.0032);
+ const subY=A.xipY-height*.007;
+ const ko=samples(new THREE.Vector3(-w*.05,subY,0),new THREE.Vector3(-w*.70,subY-height*.028,0),28);
+ ko.forEach((p,i)=>p.y+=Math.sin(Math.PI*i/(ko.length-1))*height*.006);
+ frontRibbon("kocher",ko,height*.0031);
 
- // Mercedes-Benz: bilateral subcostal chevron plus short superior midline limb.
- const ml=samples(new THREE.Vector3(-w*.76,Y(.640),0),new THREE.Vector3(0,Y(.674),0),22);
- const mr=samples(new THREE.Vector3(0,Y(.674),0),new THREE.Vector3(w*.76,Y(.640),0),22);
- frontRibbon("mercedes",ml.concat(mr.slice(1)),height*.0032);
- frontRibbon("mercedes",samples(new THREE.Vector3(0,Y(.674),0),new THREE.Vector3(0,Y(.714),0),13),height*.0032);
+ const ml=samples(new THREE.Vector3(-w*.74,subY-height*.028,0),new THREE.Vector3(0,subY,0),22);
+ const mr=samples(new THREE.Vector3(0,subY,0),new THREE.Vector3(w*.74,subY-height*.028,0),22);
+ frontRibbon("mercedes",ml.concat(mr.slice(1)),height*.0031);
+ frontRibbon("mercedes",samples(new THREE.Vector3(0,subY,0),new THREE.Vector3(0,subY+height*.040,0),13),height*.0031);
 
- // Midline laparotomy.
- frontRibbon("midline",samples(new THREE.Vector3(0,Y(.690),0),new THREE.Vector3(0,Y(.500),0),34),height*.0030);
+ frontRibbon("midline",samples(new THREE.Vector3(0,A.xipY-height*.003,0),new THREE.Vector3(0,A.pubicY+height*.004,0),36),height*.0029);
 
- // Lanz appendicectomy: short transverse scar in RIGHT iliac fossa.
- frontRibbon("appendix",samples(new THREE.Vector3(-w*.70,Y(.535),0),new THREE.Vector3(-w*.34,Y(.535),0),18),height*.0030);
+ // McBurney/Lanz centre: one-third from right ASIS to umbilicus.
+ const mcX=-w*.70+(0-(-w*.70))*.33;
+ frontRibbon("appendix",samples(new THREE.Vector3(mcX-w*.14,mcY,0),new THREE.Vector3(mcX+w*.14,mcY+height*.001,0),18),height*.0030);
 
- // Pfannenstiel: low suprapubic smile.
- const pf=samples(new THREE.Vector3(-w*.62,Y(.493),0),new THREE.Vector3(w*.62,Y(.493),0),28);
- pf.forEach((p,i)=>p.y-=Math.sin(Math.PI*i/(pf.length-1))*height*.008);
+ // Pfannenstiel/C-section: 2-3 cm above pubic symphysis, gentle suprapubic smile.
+ const pf=samples(new THREE.Vector3(-w*.58,pubicScarY,0),new THREE.Vector3(w*.58,pubicScarY,0),30);
+ pf.forEach((p,i)=>p.y-=Math.sin(Math.PI*i/(pf.length-1))*height*.006);
  frontRibbon("pfannenstiel",pf,height*.0030);
 
- // Laparoscopic ports: umbilical + representative upper/lower abdominal ports.
- [[0,.590],[-w*.38,.623],[w*.42,.604],[-w*.31,.548]].forEach(q=>surfaceDot("ports",frontSurface(q[0],Y(q[1])),height*.0043));
+ // Ports centred on the actual model umbilical level.
+ [[0,A.umbY],[-w*.36,A.umbY+height*.030],[w*.40,A.umbY-height*.012],[-w*.30,A.iliacY+height*.020]].forEach(q=>surfaceDot("ports",frontSurface(q[0],q[1]),height*.0042));
 
- // Open inguinal hernia: low oblique, medial-low to lateral-high, patient right.
- frontRibbon("inguinal",samples(new THREE.Vector3(-w*.27,Y(.493),0),new THREE.Vector3(-w*.72,Y(.532),0),22),height*.0030);
+ // Open inguinal repair: just above and parallel to inguinal ligament.
+ frontRibbon("inguinal",samples(new THREE.Vector3(-w*.20,A.pubicY+height*.010,0),new THREE.Vector3(-w*.68,A.iliacY-height*.004,0),24),height*.0030);
 
- // Rutherford-Morrison/Gibson transplant incision in RIGHT iliac fossa.
- const tx=[];for(let i=0;i<34;i++){const t=i/33,omt=1-t,x=omt*omt*(-w*.16)+2*omt*t*(-w*.43)+t*t*(-w*.74),y=omt*omt*Y(.491)+2*omt*t*Y(.515)+t*t*Y(.548);tx.push(new THREE.Vector3(x,y,0))}
+ // Rutherford-Morrison/Gibson: right iliac fossa, low medial -> lateral/superior near ASIS.
+ const tx=[];for(let i=0;i<34;i++){const t=i/33,omt=1-t,x=omt*omt*(-w*.16)+2*omt*t*(-w*.43)+t*t*(-w*.72),y=omt*omt*(A.pubicY+height*.010)+2*omt*t*(THREE.MathUtils.lerp(A.pubicY,A.iliacY,.48))+t*t*(A.iliacY+height*.004);tx.push(new THREE.Vector3(x,y,0))}
  frontRibbon("renalTx",tx,height*.0032);
 
  // RENAL -------------------------------------------------------------------
- // Dialysis access: distal volar/radial forearm.
- add("fistula",samples(mid(lh,le,.15),mid(lh,le,.34),17),radialDir,height*.0030);
+ insideRibbon("fistula",samples(mid(lh,le,.15),mid(lh,le,.34),18),radialDir,height*.0030);
 
- // Open nephrectomy: one continuous supracostal flank/loin arc above 11th/12th rib.
- const neph=[];for(let i=0;i<58;i++){const t=i/57,a=THREE.MathUtils.lerp(THREE.MathUtils.degToRad(150),THREE.MathUtils.degToRad(58),t),yf=.655-.018*t-.004*Math.sin(Math.PI*t);neph.push({a,y:Y(yf)})}
+ const neph=[];const nephBase=A.xipY-height*.028;for(let i=0;i<60;i++){const t=i/59,a=THREE.MathUtils.lerp(THREE.MathUtils.degToRad(150),THREE.MathUtils.degToRad(58),t),y=nephBase-height*.018*t-height*.003*Math.sin(Math.PI*t);neph.push({a,y})}
  aroundRibbon("nephrectomy",neph,height*.0032);
 
  // NECK / BREAST -----------------------------------------------------------
- // Thyroidectomy: low anterior-neck collar crease, entirely above clavicular/chest line.
- const thy=samples(new THREE.Vector3(-w*.20,Y(.844),0),new THREE.Vector3(w*.20,Y(.844),0),28);
- thy.forEach((p,i)=>p.y-=Math.sin(Math.PI*i/(thy.length-1))*height*.0032);
+ // Conventional thyroidectomy: low anterior-neck skin crease ~2 cm above sternal notch.
+ const thyY=A.clav.y+height*.025,thy=samples(new THREE.Vector3(-w*.18,thyY,0),new THREE.Vector3(w*.18,thyY,0),28);
+ thy.forEach((p,i)=>p.y-=Math.sin(Math.PI*i/(thy.length-1))*height*.0030);
  frontRibbon("thyroid",thy,height*.0027);
 
- // Mastectomy: unilateral scar across the breast footprint toward anterior axillary line.
- const mas=samples(new THREE.Vector3(w*.08,Y(.736),0),new THREE.Vector3(w*.82,Y(.750),0),34);
+ const breastScarY=THREE.MathUtils.lerp(A.xipY,A.chestY,.55),mas=samples(new THREE.Vector3(w*.08,breastScarY-height*.004,0),new THREE.Vector3(w*.78,breastScarY+height*.014,0),34);
  mas.forEach((p,i)=>p.y-=Math.sin(Math.PI*i/(mas.length-1))*height*.006);
  frontRibbon("mastectomy",mas,height*.0032);
 
  applyFilter()
 }
-function applyFilter(){scars.forEach(m=>m.visible=SYS[m.userData.id]===active);hits.forEach(m=>m.visible=SYS[m.userData.id]===active);document.getElementById("badge").textContent="Anatomy review v10 • "+({cardio:"Cardiovascular",resp:"Respiratory",abdo:"Abdominal",renal:"Renal",other:"Neck / other"}[active])}
+function applyFilter(){scars.forEach(m=>m.visible=SYS[m.userData.id]===active);hits.forEach(m=>m.visible=SYS[m.userData.id]===active);document.getElementById("badge").textContent="Anatomy review v11 • "+({cardio:"Cardiovascular",resp:"Respiratory",abdo:"Abdominal",renal:"Renal",other:"Neck / other"}[active])}
 function setView(v){const d=height*1.55,t=new THREE.Vector3(0,bounds.min.y+height*.54,0);if(v==="front")camera.position.set(0,t.y,d);if(v==="back")camera.position.set(0,t.y,-d);if(v==="left")camera.position.set(d,t.y,0);if(v==="right")camera.position.set(-d,t.y,0);controls.target.copy(t);controls.update();document.querySelectorAll(".view").forEach(b=>b.classList.toggle("active",b.dataset.v===v))}
 const PHOTO={
  sternotomy:{src:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Median_Sternotomy_Example.jpg?width=900",page:"https://commons.wikimedia.org/wiki/File:Median_Sternotomy_Example.jpg",credit:"Hensalm / Wikimedia Commons · CC BY-SA 4.0",caption:"Real postoperative median sternotomy (about 72 hours after surgery).",pos:"50% 46%"},
@@ -247,15 +237,15 @@ function scarPath(ctx,W,H,id){
  else if(id==="pacemaker"){p.moveTo(cx+30,cy-56);p.quadraticCurveTo(cx+62,cy-59,cx+88,cy-50)}
  else if(id==="mastectomy"){p.moveTo(cx+7,cy+5);p.bezierCurveTo(cx+44,cy+10,cx+75,cy-3,cx+104,cy-26)}
  else if(id==="thoracotomy"){p.moveTo(cx+84,cy+30);p.bezierCurveTo(cx+54,cy+23,cx+18,cy+22,cx-18,cy+25);p.bezierCurveTo(cx-50,cy+27,cx-77,cy+14,cx-96,cy-10)}
- else if(id==="chestdrain"){p.moveTo(cx+50,cy+8);p.lineTo(cx+77,cy+10)}
+ else if(id==="chestdrain"){p.moveTo(cx+48,cy-12);p.lineTo(cx+73,cy-10)}
  else if(id==="nephrectomy"){p.moveTo(cx-66,cy-2);p.bezierCurveTo(cx-23,cy+1,cx+27,cy+9,cx+75,cy+21)}
  else if(id==="kocher"){p.moveTo(cx-3,cy-26);p.bezierCurveTo(cx-27,cy-19,cx-54,cy-3,cx-91,cy+13)}
  else if(id==="mercedes"){p.moveTo(cx-105,cy+4);p.lineTo(cx,cy-28);p.lineTo(cx+105,cy+4);p.moveTo(cx,cy-28);p.lineTo(cx,cy-70)}
  else if(id==="midline"){p.moveTo(cx,cy-70);p.lineTo(cx,cy+82)}
- else if(id==="appendix"){p.moveTo(cx-91,cy+58);p.lineTo(cx-45,cy+57)}
- else if(id==="pfannenstiel"){p.moveTo(cx-78,cy+81);p.bezierCurveTo(cx-36,cy+96,cx+36,cy+96,cx+78,cy+81)}
- else if(id==="inguinal"){p.moveTo(cx-88,cy+72);p.lineTo(cx-36,cy+91)}
- else if(id==="renalTx"){p.moveTo(cx-32,cy+91);p.bezierCurveTo(cx-66,cy+79,cx-89,cy+56,cx-101,cy+27)}
+ else if(id==="appendix"){p.moveTo(cx-88,cy+34);p.lineTo(cx-42,cy+34)}
+ else if(id==="pfannenstiel"){p.moveTo(cx-78,cy+62);p.bezierCurveTo(cx-36,cy+76,cx+36,cy+76,cx+78,cy+62)}
+ else if(id==="inguinal"){p.moveTo(cx-82,cy+52);p.lineTo(cx-35,cy+72)}
+ else if(id==="renalTx"){p.moveTo(cx-30,cy+70);p.bezierCurveTo(cx-61,cy+62,cx-86,cy+42,cx-99,cy+18)}
  else if(id==="radial"){p.moveTo(cx-26,cy-70);p.lineTo(cx+21,cy+75)}
  else if(id==="saphenous"){p.moveTo(cx-10,cy+97);p.lineTo(cx-29,cy-91)}
  else if(id==="fistula"){p.moveTo(cx+8,cy+58);p.lineTo(cx+1,cy+87)}
